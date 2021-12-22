@@ -45,8 +45,8 @@ jobs:
                           * ) echo "Please answer yes or no.";;
                       break;;
               [Nn]* ) exit;;
-              * ) echo "Please answer yes or no.";;" > ChromeOS-Install.sh
-          chmod +x ChromeOS-Install.sh
+              * ) echo "Please answer yes or no.";;" > multi-install.sh
+          chmod +x multi-install.sh
           unzip "chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
           tar zxvf "brunch_r94_stable_20211127.tar.gz"
       - name: Delete Temporary File
