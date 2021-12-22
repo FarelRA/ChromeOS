@@ -29,15 +29,15 @@ jobs:
           echo "#!/bin/sh
           echo "Installing Dependencies"
           sudo apt update && sudo apt -y install wget pv tar grub-customizer unzip cgpt lzip 
-          read -p "In which folder do you want to install ChromeOS" location
-          read -p "What size will you give ChromeOS" size
+          read -p "In which folder do you want to install ChromeOS eg. "/home/user/"" location
+          read -p "What size will you give ChromeOS eg. "20G" for 20 GiB" size
           read -p "You are sure? [y/n]" yn
           case $yn in
-              [Yy]* ) echo "Ok, Proceeding installation on $partition";
+              [Yy]* ) echo "Ok, Proceeding installation on $location";
                       chmod +x chromeos-install.sh;
                       sudo bash chromeos-install.sh -src chromeos_recovery.bin -dst $location -s $size;
                       read -p "Do you want to add boot options to ChromeOS? [y/n]" boot;
-                      case $yn in;
+                      case $boot in;
                           [Yy]* ) echo "Copy the above grub menu entry in grub customizer";
                                   sudo grub-customizer;
                                   break;;
