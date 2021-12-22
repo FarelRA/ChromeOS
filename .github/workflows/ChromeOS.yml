@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Dependencies
         run: |
-          sudo apt update && sudo apt -y install setools wget pv tar unzip cgpt lzip
+          sudo apt update && sudo apt -y upgrade && sudo apt -y install wget pv tar unzip cgpt lzip
       - name: Download ChromeOS
         run: |
           cd $HOME
