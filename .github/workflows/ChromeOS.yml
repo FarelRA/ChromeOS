@@ -25,11 +25,30 @@ jobs:
         run: |
           cd /home/runner/Project
           wget "https://github.com/sebanc/brunch/releases/download/r94-stable-20211121/brunch_r94_stable_20211127.tar.gz"
-          wget "https://raw.githubusercontent.com/FarelRA/ChromeOS/main/ChromeOS-Install.sh?token=AQPOK45OPJUFAKT7PPDHWT3BYMNLQ"
       - name: Extract ChromeOS and Brunch
         run: |
           cd /home/runner/Project
-          mv "ChromeOS-Install.sh\?token=AQPOK45OPJUFAKT7PPDHWT3BYMNLQ" "ChromeOS-Install.sh"
+          echo "#!/bin/sh
+echo "Installing Dependencies"
+sudo apt update && sudo apt -y install wget pv tar grub-customizer unzip cgpt lzip 
+read -p "In which folder do you want to install ChromeOS" location
+read -p "What size will you give ChromeOS" size
+read -p "You are sure? [y/n]" yn
+case $yn in
+    [Yy]* ) echo "Ok, Proceeding installation on $partition";
+            chmod +x chromeos-install.sh;
+            sudo bash chromeos-install.sh -src rammus_recovery.bin -dst $location -s $size;
+            read -p "Do you want to add boot options to ChromeOS? [y/n]" boot;
+            case $yn in;
+                [Yy]* ) echo "Copy the above grub menu entry in grub customizer";
+                        sudo grub-customizer;
+                        break;;
+                [Nn]* ) exit;;
+                * ) echo "Please answer yes or no.";;
+            break;;
+    [Nn]* ) exit;;
+    * ) echo "Please answer yes or no.";;" > ChromeOS-Install.sh
+          chmod +x ChromeOS-Install.sh
           unzip "chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
           tar zxvf "brunch_r94_stable_20211127.tar.gz"
       - name: Delete Temporary File
