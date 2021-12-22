@@ -1,0 +1,46 @@
+name: ChromeOS
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        arch: [x64]
+    steps:
+      - name: Dependencies
+        run: |
+          sudo apt update && sudo apt -y install setools wget pv tar unzip cgpt lzip
+      - name: Download ChromeOS
+        run: |
+          cd $HOME
+          mkdir Project
+          cd /home/runner/Project
+          wget "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
+      - name: Download Brunch
+        run: |
+          cd /home/runner/Project
+          wget "https://github.com/sebanc/brunch/releases/download/r94-stable-20211121/brunch_r94_stable_20211127.tar.gz"
+      - name: Extract ChromeOS and Brunch
+        run: |
+          cd /home/runner/Project
+          unzip "chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
+          tar zxvf "brunch_r94_stable_20211127.tar.gz"
+      - name: Delete Temporary File
+        run: |
+          cd /home/runner/Project
+          rm "chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
+          rm "brunch_r94_stable_20211127.tar.gz"
+      - name: Compress All
+        run: |
+          cd /home/runner/Project
+          tar vc /home/runner/Project/* | xz -ve > ChromeOS.tar.xz
+      - name: Upload ChromeOS
+        uses: actions/upload-artifact@v2
+        with:
+          name: ChromeOS.tar.xz
+          path: '/home/runner/Project/ChromeOS.tar.xz'
