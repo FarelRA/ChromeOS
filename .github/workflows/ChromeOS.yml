@@ -6,11 +6,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        arch: [x64]
+  ChromeOS:
+    name: ChromeOS
+    runs-on: ubuntu-latest
     steps:
       - name: Dependencies
         run: |
@@ -37,7 +35,7 @@ jobs:
           case $yn in
               [Yy]* ) echo "Ok, Proceeding installation on $partition";
                       chmod +x chromeos-install.sh;
-                      sudo bash chromeos-install.sh -src rammus_recovery.bin -dst $location -s $size;
+                      sudo bash chromeos-install.sh -src chromeos_recovery.bin -dst $location -s $size;
                       read -p "Do you want to add boot options to ChromeOS? [y/n]" boot;
                       case $yn in;
                           [Yy]* ) echo "Copy the above grub menu entry in grub customizer";
@@ -56,7 +54,8 @@ jobs:
           cd /home/runner/Project
           rm "chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
           rm "brunch_r94_stable_20211127.tar.gz"
-      - name: Compress All
+          mv *.bin chromeos_recovery.bin
+      - name: Compress File
         run: |
           cd /home/runner/Project
           tar vc /home/runner/Project/* | xz -ve > ChromeOS.tar.xz
