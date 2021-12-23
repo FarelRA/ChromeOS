@@ -44,7 +44,7 @@ jobs:
         run: |
           cd "/home/runner/Project/build-img"
           tar vc /home/runner/Project/build-img/* | xz -ve > ChromeOS-Image.tar.xz
-      - name: Upload ChromeOS
+      - name: Upload ChromeOS Image
         uses: actions/upload-artifact@v2
         with:
           name: ChromeOS-Image.tar.xz
