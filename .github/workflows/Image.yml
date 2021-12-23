@@ -39,12 +39,12 @@ jobs:
         run: |
           cd /home/runner/Project
           mkdir /home/runner/Project/img
-          sudo bash chromeos-install.sh -src chromeos_recovery.bin -dst /home/runner/Project/img -s 14
+          sudo bash chromeos-install.sh -src chromeos_recovery.bin -dst /home/runner/Project/img/ChromeOS.img -s 14
       - name: Compress File
         run: |
           cd /home/runner/Project/img
           xz -vze *
-          mv *.xz ChromeOS-Image.xz
+          mv ChromeOS.img.xz ChromeOS-Image.xz
       - name: Upload ChromeOS
         uses: actions/upload-artifact@v2
         with:
