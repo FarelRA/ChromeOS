@@ -23,7 +23,7 @@ jobs:
         run: |
           cd /home/runner/Project
           wget "https://github.com/sebanc/brunch/releases/download/r94-stable-20211121/brunch_r94_stable_20211127.tar.gz"
-      - name: Download Brunch
+      - name: Download Script
         run: |
           cd /home/runner/Project
           wget "https://github.com/FarelRA/ChromeOS/blob/main/multi-install.sh"
