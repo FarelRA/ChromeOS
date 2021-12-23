@@ -43,7 +43,7 @@ jobs:
           rm "brunch_r94_stable_20211127.tar.gz"
       - name: Compress File
         run: |
-          cd /home/runner/Project"
+          cd /home/runner/Project
           tar vcf ChromeOS.tar *
           xz -ve ChromeOS.tar
       - name: Upload ChromeOS
