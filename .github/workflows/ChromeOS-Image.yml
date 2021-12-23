@@ -12,7 +12,9 @@ jobs:
     steps:
       - name: Dependencies
         run: |
-          sudo apt update && sudo apt -y upgrade && sudo apt -y install wget pv tar unzip cgpt lzip
+          sudo apt update
+          sudo apt -y upgrade
+          sudo apt -y install wget pv tar unzip cgpt lzip
       - name: Download ChromeOS
         run: |
           cd "$HOME"
@@ -28,25 +30,25 @@ jobs:
           cd "/home/runner/Project"
           unzip "chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
           tar zxvf "brunch_r94_stable_20211127.tar.gz"
+          mv *.bin chromeos_recovery.bin
           chmod +x "chromeos-install.sh"
       - name: Delete Temporary File
         run: |
           cd "/home/runner/Project"
           rm "chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
           rm "brunch_r94_stable_20211127.tar.gz"
-          mv *.bin chromeos_recovery.bin
       - name: Make img
         run: |
           cd "/home/runner/Project"
           mkdir "/home/runner/Project/build-img"
-          sudo bash chromeos-install.sh -src chromeos_recovery.bin -dst "/home/runner/Project/build-img/ChromeOS.img" -s 14
+          sudo bash chromeos-install.sh -src chromeos_recovery.bin -dst /home/runner/Project/build-img/ChromeOS.img -s 14
       - name: Compress File
         run: |
           cd "/home/runner/Project/build-img"
-          tar vc /home/runner/Project/build-img/* | xz -ve > ChromeOS-Image.tar.xz
+          tar vcf ChromeOS-Image.tar *
+          xz -ve ChromeOS-Image.tar
       - name: Upload ChromeOS Image
         uses: actions/upload-artifact@v2
         with:
           name: ChromeOS-Image.tar.xz
-          path: |
-            "/home/runner/Project/build-img/ChromeOS-Image.tar.xz"
+          path: '/home/runner/Project/build-img/ChromeOS-Image.tar.xz'
