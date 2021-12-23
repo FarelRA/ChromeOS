@@ -23,32 +23,16 @@ jobs:
         run: |
           cd /home/runner/Project
           wget "https://github.com/sebanc/brunch/releases/download/r94-stable-20211121/brunch_r94_stable_20211127.tar.gz"
+      - name: Download Brunch
+        run: |
+          cd /home/runner/Project
+          wget "https://github.com/FarelRA/ChromeOS/blob/main/multi-install.sh"
       - name: Extract ChromeOS and Brunch
         run: |
           cd /home/runner/Project
-          echo "#!/bin/sh
-          echo "Installing Dependencies"
-          sudo apt update && sudo apt -y install wget pv tar grub-customizer unzip cgpt lzip 
-          read -p "In which folder do you want to install ChromeOS eg. "/home/user/"" location
-          read -p "What size will you give ChromeOS eg. "20" for 20 GB" size
-          read -p "You are sure? [y/n]" yn
-          case $yn in
-              [Yy]* ) echo "Ok, Proceeding installation on $location";
-                      chmod +x chromeos-install.sh;
-                      sudo bash chromeos-install.sh -src chromeos_recovery.bin -dst $location -s $size;
-                      read -p "Do you want to add boot options to ChromeOS? [y/n]" boot;
-                      case $boot in;
-                          [Yy]* ) echo "Copy the above grub menu entry in grub customizer";
-                                  sudo grub-customizer;
-                                  break;;
-                          [Nn]* ) exit;;
-                          * ) echo "Please answer yes or no.";;
-                      break;;
-              [Nn]* ) exit;;
-              * ) echo "Please answer yes or no.";;" > multi-install.sh
-          chmod +x multi-install.sh
           unzip "chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
           tar zxvf "brunch_r94_stable_20211127.tar.gz"
+          chmod +x multi-install.sh
       - name: Delete Temporary File
         run: |
           cd /home/runner/Project
