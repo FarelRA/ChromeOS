@@ -1,4 +1,4 @@
-name: ChromeOS
+name: ChromeOS-Image
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   ChromeOS:
-    name: ChromeOS
+    name: ChromeOS-Image
     runs-on: ubuntu-latest
     steps:
       - name: Dependencies
