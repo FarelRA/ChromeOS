@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  ChromeOS:
+  ChromeOS-Image:
     name: ChromeOS-Image
     runs-on: ubuntu-latest
     steps:
