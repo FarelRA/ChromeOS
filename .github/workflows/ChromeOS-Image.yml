@@ -43,8 +43,8 @@ jobs:
       - name: Compress File
         run: |
           cd /home/runner/Project/img
-          xz -vze *
-          mv ChromeOS.img.xz ChromeOS-Image.xz
+          sudo xz -vze *
+          sudo mv ChromeOS.img.xz ChromeOS-Image.xz
       - name: Upload ChromeOS
         uses: actions/upload-artifact@v2
         with:
