@@ -1,9 +1,17 @@
 name: ChromeOS
-
 on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      chromeos:
+        description: "ChromeOS Download link"
+        required: true
+        default: "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
+      brunch:
+        description: "Brunch Download link"
+        required: true
+        default: "https://github.com/sebanc/brunch/releases/download/r94-stable-20211121/brunch_r94_stable_20211127.tar.gz"
 
 jobs:
   ChromeOS:
@@ -20,11 +28,11 @@ jobs:
           cd $HOME
           mkdir Project
           cd /home/runner/Project
-          wget "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
+          wget "${{ github.event.inputs.chromeos }}"
       - name: Download Brunch
         run: |
           cd /home/runner/Project
-          wget "https://github.com/sebanc/brunch/releases/download/r94-stable-20211121/brunch_r94_stable_20211127.tar.gz"
+          wget "${{ github.event.inputs.brunch }}"
       - name: Download Script
         run: |
           cd /home/runner/Project
@@ -32,15 +40,15 @@ jobs:
       - name: Extract ChromeOS and Brunch
         run: |
           cd /home/runner/Project
-          unzip "chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
-          tar zxvf "brunch_r94_stable_20211127.tar.gz"
+          unzip *recovery_stable-channel_mp-v2.bin.zip
+          tar zxvf *.tar.gz
           mv *.bin chromeos_recovery.bin
           chmod +x multi-install.sh
       - name: Delete Temporary File
         run: |
           cd /home/runner/Project
-          rm "chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
-          rm "brunch_r94_stable_20211127.tar.gz"
+          rm *recovery_stable-channel_mp-v2.bin.zip
+          rm *.tar.gz
       - name: Compress File
         run: |
           cd /home/runner/Project
