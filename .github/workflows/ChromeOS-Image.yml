@@ -40,7 +40,7 @@ jobs:
           unzip *recovery_stable-channel_mp-v2.bin.zip
           tar zxvf *.tar.gz
           mv *.bin chromeos_recovery.bin
-          chmod +x multi-install.sh
+          chmod +x chromeos-install.sh
       - name: Delete Temporary File
         run: |
           cd /home/runner/Project
