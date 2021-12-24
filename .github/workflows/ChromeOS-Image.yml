@@ -56,6 +56,14 @@ jobs:
           cd "/home/runner/Project/build-img"
           tar vcf ChromeOS-Image.tar *
           xz -ve ChromeOS-Image.tar
+      - name: Check Compressed File Checksum
+        run: |
+          cd "/home/runner/Project/build-img"
+          echo SHA-256
+          sha256sum ChromeOS-Image.tar.xz
+          echo "-------------------------------------------------------------------------------"
+          echo MD5
+          md5sum ChromeOS-Image.tar.xz
       - name: Upload ChromeOS Image
         uses: actions/upload-artifact@v2
         with:
