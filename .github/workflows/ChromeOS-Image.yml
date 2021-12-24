@@ -43,7 +43,7 @@ jobs:
           chmod +x chromeos-install.sh
       - name: Delete Temporary File
         run: |
-          cd /home/runner/Project
+          cd "/home/runner/Project"
           rm *recovery_stable-channel_mp-v2.bin.zip
           rm *.tar.gz
       - name: Make img
