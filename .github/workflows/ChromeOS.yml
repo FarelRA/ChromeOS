@@ -2,16 +2,6 @@ name: ChromeOS
 on:
   push:
   pull_request:
-  workflow_dispatch:
-    inputs:
-      chromeos:
-        description: "ChromeOS Download link"
-        required: true
-        default: "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
-      brunch:
-        description: "Brunch Download link"
-        required: true
-        default: "https://github.com/sebanc/brunch/releases/download/r94-stable-20211121/brunch_r94_stable_20211127.tar.gz"
 
 jobs:
   ChromeOS:
@@ -28,11 +18,11 @@ jobs:
           cd $HOME
           mkdir Project
           cd /home/runner/Project
-          wget "${{ github.event.inputs.chromeos }}"
+          wget "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
       - name: Download Brunch
         run: |
           cd /home/runner/Project
-          wget "${{ github.event.inputs.brunch }}"
+          wget "https://github.com/sebanc/brunch/releases/download/r94-stable-20211121/brunch_r94_stable_20211127.tar.gz"
       - name: Download Script
         run: |
           cd /home/runner/Project
