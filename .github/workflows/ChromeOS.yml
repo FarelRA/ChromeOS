@@ -18,11 +18,11 @@ jobs:
           cd $HOME
           mkdir Project
           cd /home/runner/Project
-          wget "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
+          wget "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_14324.62.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
       - name: Download Brunch
         run: |
           cd /home/runner/Project
-          wget "https://github.com/sebanc/brunch/releases/download/r94-stable-20211121/brunch_r94_stable_20211127.tar.gz"
+          wget "https://github.com/sebanc/brunch/releases/download/r97-stable-20220121/brunch_r97_stable_20220121.tar.gz"
       - name: Download Script
         run: |
           cd /home/runner/Project
