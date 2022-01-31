@@ -26,7 +26,7 @@ jobs:
       - name: Download Script
         run: |
           cd /home/runner/Project
-          wget "https://github.com/FarelRA/ChromeOS/blob/main/multi-install.sh"
+          wget "https://raw.githubusercontent.com/FarelRA/ChromeOS/main/multi-install.sh"
       - name: Extract ChromeOS and Brunch
         run: |
           cd /home/runner/Project
