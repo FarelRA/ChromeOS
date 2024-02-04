@@ -1,7 +1,16 @@
 name: ChromeOS
+
 on:
-  push:
-  pull_request:
+  workflow_dispatch:
+    inputs:
+      chromeos:
+        description: "ChromeOS Download link (.bin.zip)"
+        required: true
+        default: "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
+      brunch:
+        description: "Brunch Download link (.tar.gz)"
+        required: true
+        default: "https://github.com/sebanc/brunch/releases/download/r94-stable-20211121/brunch_r94_stable_20211127.tar.gz"
 
 jobs:
   ChromeOS:
@@ -11,18 +20,17 @@ jobs:
       - name: Dependencies
         run: |
           sudo apt update
-          sudo apt -y upgrade
-          sudo apt -y install wget pv tar unzip cgpt lzip
+          sudo apt -y install wget pv tar unzip cgpt lzip zstd
       - name: Download ChromeOS
         run: |
           cd $HOME
           mkdir Project
           cd /home/runner/Project
-          wget "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_14526.57.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
+          wget "${{ github.event.inputs.chromeos }}"
       - name: Download Brunch
         run: |
           cd /home/runner/Project
-          wget "https://github.com/sebanc/brunch/releases/download/r100-stable-20220402/brunch_r100_stable_20220402.tar.gz"
+          wget "${{ github.event.inputs.brunch }}"
       - name: Download Script
         run: |
           cd /home/runner/Project
@@ -30,30 +38,34 @@ jobs:
       - name: Extract ChromeOS and Brunch
         run: |
           cd /home/runner/Project
-          unzip *recovery_stable-channel_mp-v2.bin.zip
+          unzip *.bin.zip
           tar zxvf *.tar.gz
           mv *.bin chromeos_recovery.bin
-          chmod +x multi-install.sh
+          chmod +x chromeos-install.sh
       - name: Delete Temporary File
         run: |
           cd /home/runner/Project
-          rm *recovery_stable-channel_mp-v2.bin.zip
+          rm *.bin.zip
           rm *.tar.gz
       - name: Compress File
         run: |
           cd /home/runner/Project
           tar vcf ChromeOS.tar *
-          xz -ve ChromeOS.tar
+          zstd \
+            --compress \
+            --threads=2 \
+            --rm \
+            -19 ChromeOS.tar
       - name: Check Compressed File Checksum
         run: |
           cd /home/runner/Project
           echo SHA-256
-          sha256sum ChromeOS.tar.xz
+          sha256sum ChromeOS.tar.zst
           echo "---------------------------------------------------------------------------------"
           echo MD5
-          md5sum ChromeOS.tar.xz
+          md5sum ChromeOS.tar.zst
       - name: Upload ChromeOS
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: ChromeOS.tar.xz
-          path: '/home/runner/Project/ChromeOS.tar.xz'
+          name: ChromeOS
+          path: '/home/runner/Project/ChromeOS.tar.zst'
