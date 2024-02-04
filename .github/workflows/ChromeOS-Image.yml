@@ -1,16 +1,14 @@
 name: ChromeOS Image
 
 on:
-  push:
-  pull_request:
   workflow_dispatch:
     inputs:
       chromeos:
-        description: "ChromeOS Download link"
+        description: "ChromeOS Download link (.bin.zip)"
         required: true
         default: "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_14150.74.0_rammus_recovery_stable-channel_mp-v2.bin.zip"
       brunch:
-        description: "Brunch Download link"
+        description: "Brunch Download link (.tar.gz)"
         required: true
         default: "https://github.com/sebanc/brunch/releases/download/r94-stable-20211121/brunch_r94_stable_20211127.tar.gz"
 
@@ -22,8 +20,7 @@ jobs:
       - name: Dependencies
         run: |
           sudo apt update
-          sudo apt -y upgrade
-          sudo apt -y install wget pv tar unzip cgpt lzip
+          sudo apt -y install wget pv tar unzip cgpt lzip zstd
       - name: Download ChromeOS
         run: |
           cd $HOME
@@ -37,14 +34,14 @@ jobs:
       - name: Extract ChromeOS and Brunch
         run: |
           cd /home/runner/Project
-          unzip *recovery_stable-channel_mp-v2.bin.zip
+          unzip *.bin.zip
           tar zxvf *.tar.gz
           mv *.bin chromeos_recovery.bin
           chmod +x chromeos-install.sh
       - name: Delete Temporary File
         run: |
           cd "/home/runner/Project"
-          rm *recovery_stable-channel_mp-v2.bin.zip
+          rm *.bin.zip
           rm *.tar.gz
       - name: Make img
         run: |
@@ -55,17 +52,21 @@ jobs:
         run: |
           cd "/home/runner/Project/build-img"
           tar vcf ChromeOS-Image.tar *
-          xz -ve ChromeOS-Image.tar
+          zstd \
+            --compress \
+            --threads=2 \
+            --rm \
+            -19 ChromeOS-Image.tar
       - name: Check Compressed File Checksum
         run: |
           cd "/home/runner/Project/build-img"
           echo SHA-256
-          sha256sum ChromeOS-Image.tar.xz
+          sha256sum ChromeOS-Image.tar.zst
           echo "-------------------------------------------------------------------------------"
           echo MD5
-          md5sum ChromeOS-Image.tar.xz
+          md5sum ChromeOS-Image.tar.zst
       - name: Upload ChromeOS Image
         uses: actions/upload-artifact@v2
         with:
-          name: ChromeOS-Image.tar.xz
-          path: '/home/runner/Project/build-img/ChromeOS-Image.tar.xz'
+          name: ChromeOS-Image
+          path: '/home/runner/Project/build-img/ChromeOS-Image.tar.zst'
