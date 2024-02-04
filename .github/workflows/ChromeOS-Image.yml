@@ -56,23 +56,20 @@ jobs:
           find . -maxdepth 1 -type f -delete
       - name: Compress File
         run: |
+          export ZSTD_CLEVEL=19
+          export ZSTD_NBTHREADS=2
           cd build-img
-          zstd \
-            --compress \
-            --threads=2 \
-            --rm \
-            -19 \
-            ChromeOS.img
+          tar --create --zstd --remove-files --file ChromeOS-Image.tar.zst *
       - name: Check Compressed File Checksum
         run: |
           cd build-img
           echo SHA-256
-          sha256sum ChromeOS.img.zst
+          sha256sum ChromeOS-Image.tar.zst
           echo "-------------------------------------------------------------------------------"
           echo MD5
-          md5sum ChromeOS.img.zst
+          md5sum ChromeOS-Image.tar.zst
       - name: Upload ChromeOS Image
         uses: actions/upload-artifact@v4
         with:
           name: ChromeOS-Image
-          path: build-img/ChromeOS.img.zst
+          path: build-img/ChromeOS-Image.tar.zst
