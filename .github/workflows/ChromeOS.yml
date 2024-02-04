@@ -50,12 +50,9 @@ jobs:
       - name: Compress File
         run: |
           cd /home/runner/Project
-          tar vcf ChromeOS.tar *
-          zstd \
-            --compress \
-            --threads=2 \
-            --rm \
-            -19 ChromeOS.tar
+          export ZSTD_CLEVEL=19
+          export ZSTD_NBTHREADS=2
+          tar --create --zstd --remove-files --file ChromeOS.tar.zst *
       - name: Check Compressed File Checksum
         run: |
           cd /home/runner/Project
